@@ -1,8 +1,9 @@
 from flask import Flask, request, jsonify
 import secrets
+import os
 
 app = Flask(__name__)
-registrations = {}  # In-memory store for registration codes
+registrations = {}  # In-memory store
 
 @app.route("/registration", methods=["POST"])
 def registration():
@@ -15,3 +16,12 @@ def registration():
     registrations[uid] = code
     print(f"[Registration] UID: {uid} -> Code: {code}")
     return jsonify({"code": code})
+
+def start_flask():
+    """Starts the Flask app"""
+    port = int(os.environ.get("PORT", 3000))
+    app.run(host="0.0.0.0", port=port)
+
+# Optional: allow running Flask directly
+if __name__ == "__main__":
+    start_flask()
