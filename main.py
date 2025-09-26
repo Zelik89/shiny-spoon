@@ -19,7 +19,7 @@ def registration():
 
 def start_flask():
     """Starts the Flask app"""
-    port = int(os.environ.get("PORT", 3000))
+    port = int(os.environ.get("PORT", 8080))
     app.run(host="0.0.0.0", port=port)
 
 # Optional: allow running Flask directly
