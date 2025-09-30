@@ -7,21 +7,17 @@ registrations = {}
 
 @app.route("/registration", methods=["POST"])
 def registration():
-    raw_data = request.data.decode("utf-8")  # read body as string
-    print("Received raw data:", raw_data)
-
-    # Try to parse JSON manually
-    import json
     try:
-        data = json.loads(raw_data)
-    except json.JSONDecodeError:
+        # Attempt to parse JSON directly
+        data = request.get_json(force=True)  # <-- force=True parses even if Content-Type is not application/json
+    except Exception as e:
+        print("Failed to parse JSON:", e)
         return jsonify({"error": "Invalid JSON"}), 400
 
-    if "uid" not in data:
+    if not data or "uid" not in data:
         return jsonify({"error": "Missing uid"}), 400
 
     uid = data["uid"]
-    import secrets
     code = secrets.token_hex(3).upper()
     registrations[uid] = code
     return jsonify({"code": code})
